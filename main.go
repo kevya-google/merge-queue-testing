@@ -8,6 +8,22 @@ import (
 	workerpool "github.com/abcxyz/pkg/workerpool"
 )
 
+/*
+
+Output:
+
+	kevya@kevya-but-large:~/gitrepos/merge-queue-testing$ go run main.go
+	Success Count:  99924
+	kevya@kevya-but-large:~/gitrepos/merge-queue-testing$ go run main.go
+	Success Count:  99910
+	kevya@kevya-but-large:~/gitrepos/merge-queue-testing$ go run main.go
+	Success Count:  99905
+	kevya@kevya-but-large:~/gitrepos/merge-queue-testing$ go run main.go
+	Success Count:  99928
+	kevya@kevya-but-large:~/gitrepos/merge-queue-testing$ go run main.go
+
+*/
+
 func main() {
 	ctx := context.Background()
 	pool := workerpool.New[*workerpool.Void](&workerpool.Config{
