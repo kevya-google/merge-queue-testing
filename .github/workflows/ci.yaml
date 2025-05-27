@@ -1,17 +1,36 @@
-name: 'ci'
+name: 'multi-approvers'
 
 on:
-  pull_request:
-    branches: ['main']
-  merge_group:
+  pull_request_target:
+    types:
+      - 'opened'
+      - 'edited'
+      - 'reopened'
+      - 'synchronize'
+      - 'ready_for_review'
+      - 'review_requested'
+      - 'review_request_removed'
+  pull_request_review:
+    types:
+      - 'submitted'
+      - 'dismissed'
+
+permissions:
+  actions: 'write'
+  contents: 'read'
+  id-token: 'write'
+  pull-requests: 'read'
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
 
 jobs:
-  test:
+  multi-approvers:
     runs-on: 'ubuntu-latest'
     steps:
-    - name: Checkout
-      uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
-
-    - name: 'Deploy to Cloud Run'
-      run: |-
-        echo "hello"
+      - name: 'Multi-approvers'
+        uses: 'abcxyz/actions/.github/actions/multi-approvers@893209ed79a3d2508eeec375ffaf3d21012f5cd0'
+        with:
+          team: 'multi-approvers'
+          token: '${{ secrets.MULTI_APPROVERS_TOKEN }}'
